@@ -1,22 +1,33 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { ClerkProvider } from '@clerk/clerk-react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import LoginPage from './pages/LoginPage'
+import DashboardPage from './pages/DashboardPage'
+import ProtectedRoute from './components/ProtectedRoute'
+
+const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+if (!clerkPublishableKey) {
+  throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY in .env.local')
+}
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: '1rem' }}>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', color: 'var(--color-text-primary)' }}>
-              VectorStudy
-            </h1>
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: '1.125rem' }}>
-              Adaptive AI Exam Architect — Design system initialized.
-            </p>
-            <span className="badge badge-accent">Section 1 Complete</span>
-          </div>
-        } />
-      </Routes>
-    </BrowserRouter>
+    <ClerkProvider publishableKey={clerkPublishableKey}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ClerkProvider>
   )
 }
 
