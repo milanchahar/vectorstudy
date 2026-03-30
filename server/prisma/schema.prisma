@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  exams        Exam[]
+  progressLogs ProgressLog[]
+}
+
+model Exam {
+  id        String     @id @default(cuid())
+  subject   String
+  examDate  DateTime
+  status    ExamStatus @default(ACTIVE)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  topics Topic[]
+}
+
+model Topic {
+  id          String     @id @default(cuid())
+  name        String
+  difficulty  Difficulty
+  weightage   Float
+  dayAssigned Int
+  studyHours  Float      @default(1.0)
+  isCompleted Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  examId String
+  exam   Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  progressLogs ProgressLog[]
+}
+
+model ProgressLog {
+  id          String   @id @default(cuid())
+  completedAt DateTime @default(now())
+  score       Float?
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  topicId String
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topicId])
+}
+
+enum ExamStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
