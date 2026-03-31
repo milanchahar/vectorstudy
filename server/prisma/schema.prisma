@@ -63,7 +63,7 @@ model ProgressLog {
   topicId String
   topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, topicId])
+  @@index([userId, topicId, completedAt])
 }
 
 enum ExamStatus {
