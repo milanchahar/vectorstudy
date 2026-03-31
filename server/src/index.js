@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import dotenv from 'dotenv'
 import geminiRoutes from './routes/geminiRoutes.js'
 import examRoutes from './routes/examRoutes.js'
+import youtubeRoutes from './routes/youtubeRoutes.js'
 
 dotenv.config()
 
@@ -22,6 +23,7 @@ app.get('/health', (req, res) => {
 
 app.use('/api/gemini', geminiRoutes)
 app.use('/api/exams', examRoutes)
+app.use('/api/youtube', youtubeRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
