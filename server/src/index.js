@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import geminiRoutes from './routes/geminiRoutes.js'
+import examRoutes from './routes/examRoutes.js'
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ app.get('/health', (req, res) => {
 })
 
 app.use('/api/gemini', geminiRoutes)
+app.use('/api/exams', examRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
