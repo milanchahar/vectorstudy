@@ -2,6 +2,7 @@ import { useUser } from '@clerk/clerk-react'
 import SubjectOnboarding from '../components/SubjectOnboarding'
 import ExamTimingPicker from '../components/ExamTimingPicker'
 import TextSyllabusInput from '../components/TextSyllabusInput'
+import MediaSyllabusUploader from '../components/MediaSyllabusUploader'
 
 function DashboardPage() {
   const { user } = useUser()
@@ -21,6 +22,7 @@ function DashboardPage() {
         <SubjectOnboarding />
         <ExamTimingPicker />
         <TextSyllabusInput />
+        <MediaSyllabusUploader />
       </div>
     </div>
   )

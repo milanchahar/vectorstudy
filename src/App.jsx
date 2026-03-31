@@ -7,6 +7,7 @@ import AppLayout from './components/AppLayout'
 import SubjectOnboarding from './components/SubjectOnboarding'
 import ExamTimingPicker from './components/ExamTimingPicker'
 import TextSyllabusInput from './components/TextSyllabusInput'
+import MediaSyllabusUploader from './components/MediaSyllabusUploader'
 
 const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -44,6 +45,7 @@ function App() {
               <SubjectOnboarding />
               <ExamTimingPicker />
               <TextSyllabusInput />
+              <MediaSyllabusUploader />
             </div>
           </div>
         </main>
