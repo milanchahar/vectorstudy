@@ -2,61 +2,66 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Mic, MicOff } from 'lucide-react'
 
 const STORAGE_KEY = 'vectorstudy_syllabus_text'
+const SpeechRecognitionCtor = typeof window !== 'undefined'
+  ? window.SpeechRecognition || window.webkitSpeechRecognition
+  : null
+
+function readStoredText() {
+  try {
+    return localStorage.getItem(STORAGE_KEY) || ''
+  } catch {
+    return ''
+  }
+}
+
+function writeStoredText(value) {
+  try {
+    localStorage.setItem(STORAGE_KEY, value)
+  } catch (err) {
+    console.warn('Unable to persist syllabus text:', err)
+  }
+}
 
 function TextSyllabusInput() {
-  const [text, setText] = useState('')
-  const [isSupported, setIsSupported] = useState(false)
+  const [text, setText] = useState(readStoredText)
+  const [isSupported] = useState(Boolean(SpeechRecognitionCtor))
   const [isListening, setIsListening] = useState(false)
   const recognitionRef = useRef(null)
 
   useEffect(() => {
-    try {
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition
-      if (!SpeechRecognition) {
-        setIsSupported(false)
-        return
-      }
-      setIsSupported(true)
+    if (!SpeechRecognitionCtor) return undefined
 
-      const recognition = new SpeechRecognition()
-      recognition.lang = 'en-US'
-      recognition.interimResults = true
-      recognition.continuous = false
+    const recognition = new SpeechRecognitionCtor()
+    recognition.lang = 'en-US'
+    recognition.interimResults = true
+    recognition.continuous = false
 
-      recognition.onstart = () => setIsListening(true)
-      recognition.onend = () => setIsListening(false)
+    recognition.onstart = () => setIsListening(true)
+    recognition.onend = () => setIsListening(false)
 
-      recognition.onresult = event => {
-        let finalTranscript = ''
-        for (let i = 0; i < event.results.length; i += 1) {
-          const res = event.results[i]
-          if (res.isFinal && res[0]) finalTranscript += res[0].transcript
-        }
-
-        const normalized = finalTranscript.trim()
-        if (!normalized) return
-
-        setText(prev => {
-          const next = prev.trim().length === 0 ? normalized : `${prev.trim()} ${normalized}`
-          try {
-            localStorage.setItem(STORAGE_KEY, next)
-          } catch {}
-          return next
-        })
+    recognition.onresult = event => {
+      let finalTranscript = ''
+      for (let i = 0; i < event.results.length; i += 1) {
+        const result = event.results[i]
+        if (result.isFinal && result[0]) finalTranscript += result[0].transcript
       }
 
-      recognitionRef.current = recognition
-    } catch {
-      setIsSupported(false)
+      const normalized = finalTranscript.trim()
+      if (!normalized) return
+
+      setText(prev => {
+        const next = prev.trim().length === 0 ? normalized : `${prev.trim()} ${normalized}`
+        writeStoredText(next)
+        return next
+      })
     }
-  }, [])
 
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) setText(stored)
-    } catch {}
+    recognitionRef.current = recognition
+
+    return () => {
+      recognitionRef.current = null
+      recognition.stop()
+    }
   }, [])
 
   const charCount = useMemo(() => text.length, [text])
@@ -64,9 +69,7 @@ function TextSyllabusInput() {
   function handleChange(e) {
     const next = e.target.value
     setText(next)
-    try {
-      localStorage.setItem(STORAGE_KEY, next)
-    } catch {}
+    writeStoredText(next)
   }
 
   function toggleListening() {
@@ -81,7 +84,8 @@ function TextSyllabusInput() {
 
     try {
       recognition.start()
-    } catch {
+    } catch (err) {
+      console.warn('Unable to start voice recognition:', err)
       setIsListening(false)
     }
   }
@@ -137,4 +141,3 @@ function TextSyllabusInput() {
 }
 
 export default TextSyllabusInput
-

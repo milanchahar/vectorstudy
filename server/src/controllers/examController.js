@@ -38,7 +38,7 @@ export async function getActiveExamHandler(req, res) {
 
 export async function createExamHandler(req, res) {
   try {
-    const { subject, examDate, topics } = req.body
+    const { subject, examDate, topics, userName, userEmail } = req.body
     // Assuming userId is passed in headers or body for now (clerk integration)
     const userId = req.headers['x-clerk-id'] || req.body.userId
 
@@ -52,6 +52,8 @@ export async function createExamHandler(req, res) {
 
     const exam = await createExamWithPlan({
       userId,
+      userName,
+      userEmail,
       subject,
       examDate,
       topics,

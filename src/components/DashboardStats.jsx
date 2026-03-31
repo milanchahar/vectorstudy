@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { CheckCircle2, Clock, Calendar, Zap } from 'lucide-react'
 
 function DashboardStats({ stats }) {
+  const MotionDiv = motion.div
   const items = [
     {
       label: 'Overall Progress',
@@ -32,7 +33,7 @@ function DashboardStats({ stats }) {
   return (
     <div className="dashboard-stats-grid">
       {items.map((item, idx) => (
-        <motion.div
+        <MotionDiv
           key={item.label}
           className="stat-card card-elevated"
           initial={{ opacity: 0, y: 20 }}
@@ -49,7 +50,7 @@ function DashboardStats({ stats }) {
             <h3 className="stat-value">{item.value}</h3>
             <p className="stat-sub">{item.sub}</p>
           </div>
-        </motion.div>
+        </MotionDiv>
       ))}
 
       <style>{`

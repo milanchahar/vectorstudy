@@ -17,23 +17,68 @@ function safeExtractJson(text) {
 }
 
 function normalizeTopicDifficulty(difficulty) {
-  const v = typeof difficulty === 'string' ? difficulty.trim().toUpperCase() : ''
-  if (v === 'EASY') return 'EASY'
-  if (v === 'MEDIUM') return 'MEDIUM'
-  if (v === 'HARD') return 'HARD'
+  const value = typeof difficulty === 'string' ? difficulty.trim().toUpperCase() : ''
+  if (value === 'EASY') return 'EASY'
+  if (value === 'MEDIUM') return 'MEDIUM'
+  if (value === 'HARD') return 'HARD'
   return 'MEDIUM'
 }
 
 function normalizeImportance(importance) {
-  const n = typeof importance === 'number' ? importance : Number(importance)
-  if (!Number.isFinite(n)) return 50
-  return Math.max(0, Math.min(100, n))
+  const value = typeof importance === 'number' ? importance : Number(importance)
+  if (!Number.isFinite(value)) return 50
+  return Math.max(0, Math.min(100, value))
+}
+
+function inferDifficulty(name, index) {
+  const normalized = name.toLowerCase()
+  if (
+    normalized.includes('advanced') ||
+    normalized.includes('optimization') ||
+    normalized.includes('theorem') ||
+    normalized.includes('consensus') ||
+    normalized.includes('proof')
+  ) {
+    return 'HARD'
+  }
+  if (name.split(' ').length <= 2 && index < 4) return 'EASY'
+  return index % 3 === 0 ? 'HARD' : 'MEDIUM'
+}
+
+function extractTopicsWithoutGemini({ syllabusText }) {
+  const rawParts = syllabusText
+    .split(/\n|,|;|\./)
+    .map(part => part.replace(/^[\s*\-0-9.)]+/, '').trim())
+    .filter(Boolean)
+
+  const unique = []
+  const seen = new Set()
+
+  for (const part of rawParts) {
+    const key = part.toLowerCase()
+    if (part.length < 3 || seen.has(key)) continue
+    seen.add(key)
+    unique.push(part)
+    if (unique.length >= 20) break
+  }
+
+  if (!unique.length) {
+    throw new Error('Please provide a more detailed syllabus to generate topics')
+  }
+
+  return {
+    topics: unique.map((name, index) => ({
+      name,
+      difficulty: inferDifficulty(name, index),
+      importance: Math.max(20, 100 - index * 4),
+    })),
+  }
 }
 
 export async function extractTopicsFromGemini({ subject, syllabusText }) {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
-    throw new Error('Missing GEMINI_API_KEY')
+    return extractTopicsWithoutGemini({ subject, syllabusText })
   }
 
   const ai = new GoogleGenAI({ apiKey })
@@ -67,21 +112,20 @@ ${syllabusText}
 
   const data = safeExtractJson(response?.text)
   if (!data || !Array.isArray(data.topics)) {
-    throw new Error('Gemini returned invalid JSON')
+    return extractTopicsWithoutGemini({ subject, syllabusText })
   }
 
   const topics = data.topics
-    .map(t => ({
-      name: typeof t?.name === 'string' ? t.name.trim() : '',
-      difficulty: normalizeTopicDifficulty(t?.difficulty),
-      importance: normalizeImportance(t?.importance),
+    .map(topic => ({
+      name: typeof topic?.name === 'string' ? topic.name.trim() : '',
+      difficulty: normalizeTopicDifficulty(topic?.difficulty),
+      importance: normalizeImportance(topic?.importance),
     }))
-    .filter(t => t.name.length > 0)
+    .filter(topic => topic.name.length > 0)
 
   if (!topics.length) {
-    throw new Error('Gemini returned no topics')
+    return extractTopicsWithoutGemini({ subject, syllabusText })
   }
 
   return { topics }
 }
-

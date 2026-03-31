@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 
 const STORAGE_KEY = 'vectorstudy_subject'
 
@@ -12,25 +12,22 @@ const SUBJECTS = [
 ]
 
 function SubjectOnboarding() {
-  const subjects = useMemo(() => SUBJECTS, [])
-  const [selectedId, setSelectedId] = useState(null)
-
-  useEffect(() => {
+  const [selectedId, setSelectedId] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored && subjects.some(s => s.id === stored)) {
-        setSelectedId(stored)
-      }
+      return stored && SUBJECTS.some(subject => subject.id === stored) ? stored : null
     } catch {
-      setSelectedId(null)
+      return null
     }
-  }, [subjects])
+  })
 
   function handleSelect(id) {
     setSelectedId(id)
     try {
       localStorage.setItem(STORAGE_KEY, id)
-    } catch {}
+    } catch (err) {
+      console.warn('Unable to persist subject selection:', err)
+    }
   }
 
   return (
@@ -44,7 +41,7 @@ function SubjectOnboarding() {
         </div>
 
         <div className="subject-grid" role="list">
-          {subjects.map(subject => {
+          {SUBJECTS.map(subject => {
             const isSelected = selectedId === subject.id
             return (
               <button
@@ -66,7 +63,7 @@ function SubjectOnboarding() {
 
         <div className="subject-onboarding-footer">
           <div className="subject-status">
-            {selectedId ? `Current focus: ${subjects.find(s => s.id === selectedId)?.label}` : 'No subject selected yet'}
+            {selectedId ? `Current focus: ${SUBJECTS.find(subject => subject.id === selectedId)?.label}` : 'No subject selected yet'}
           </div>
         </div>
       </div>
@@ -75,4 +72,3 @@ function SubjectOnboarding() {
 }
 
 export default SubjectOnboarding
-

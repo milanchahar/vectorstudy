@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { UploadCloud, Image as ImageIcon, FileText } from 'lucide-react'
 
 const STORAGE_KEY = 'vectorstudy_syllabus_media_names'
@@ -30,28 +30,12 @@ function MediaSyllabusUploader() {
   const [files, setFiles] = useState([])
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        const parsed = JSON.parse(stored)
-        if (Array.isArray(parsed) && parsed.length) {
-          setFiles(prev => prev)
-        }
-      }
-    } catch {}
-  }, [])
-
-  const previewUrls = useMemo(() => {
-    return files
-      .filter(f => isImage(f.file))
-      .map(f => f.previewUrl)
-  }, [files])
-
-  useEffect(() => {
     return () => {
-      for (const url of previewUrls) URL.revokeObjectURL(url)
+      for (const item of files) {
+        if (item.previewUrl) URL.revokeObjectURL(item.previewUrl)
+      }
     }
-  }, [previewUrls])
+  }, [files])
 
   function addFiles(list) {
     const next = []
@@ -76,7 +60,9 @@ function MediaSyllabusUploader() {
       const names = merged.map(x => x.file.name)
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(names))
-      } catch {}
+      } catch (err) {
+        console.warn('Unable to persist syllabus media names:', err)
+      }
       return merged
     })
   }
@@ -125,7 +111,9 @@ function MediaSyllabusUploader() {
       const names = next.map(x => x.file.name)
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(names))
-      } catch {}
+      } catch (err) {
+        console.warn('Unable to persist syllabus media names:', err)
+      }
       return next
     })
   }
@@ -135,7 +123,9 @@ function MediaSyllabusUploader() {
       for (const item of prev) if (item.previewUrl) URL.revokeObjectURL(item.previewUrl)
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify([]))
-      } catch {}
+      } catch (err) {
+        console.warn('Unable to clear syllabus media names:', err)
+      }
       return []
     })
   }
@@ -238,4 +228,3 @@ function MediaSyllabusUploader() {
 }
 
 export default MediaSyllabusUploader
-

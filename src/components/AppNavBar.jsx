@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { useUser, useClerk } from '@clerk/clerk-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LayoutDashboard, Map, BarChart2, ChevronDown, LogOut, User } from 'lucide-react'
+import { LayoutDashboard, Map, BarChart2, ChevronDown, LogOut } from 'lucide-react'
 
 const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
@@ -11,8 +10,14 @@ const navItems = [
 ]
 
 function AppNavBar() {
-  const { user } = useUser()
-  const { signOut } = useClerk()
+  const MotionDiv = motion.div
+  const user = {
+    id: 'demo-user',
+    firstName: 'John',
+    fullName: 'John Doe',
+    imageUrl: 'https://ui-avatars.com/api/?name=John+Doe&background=random',
+    primaryEmailAddress: { emailAddress: 'john.doe@example.com' },
+  }
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -28,7 +33,7 @@ function AppNavBar() {
   }, [])
 
   async function handleSignOut() {
-    await signOut()
+    setDropdownOpen(false)
     navigate('/login')
   }
 
@@ -47,16 +52,16 @@ function AppNavBar() {
         </NavLink>
 
         <nav className="nav-links">
-          {navItems.map(({ label, to, icon: Icon }) => (
+          {navItems.map(item => (
             <NavLink
-              key={to}
-              to={to}
+              key={item.to}
+              to={item.to}
               className={({ isActive }) =>
                 `nav-link ${isActive ? 'nav-link--active' : ''}`
               }
             >
-              <Icon size={16} strokeWidth={1.75} />
-              {label}
+              <item.icon size={16} strokeWidth={1.75} />
+              {item.label}
             </NavLink>
           ))}
         </nav>
@@ -83,7 +88,7 @@ function AppNavBar() {
 
           <AnimatePresence>
             {dropdownOpen && (
-              <motion.div
+              <MotionDiv
                 className="profile-dropdown"
                 initial={{ opacity: 0, y: -8, scale: 0.97 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -106,18 +111,11 @@ function AppNavBar() {
 
                 <hr className="dropdown-divider" />
 
-                <button className="dropdown-item" onClick={() => { setDropdownOpen(false); navigate('/profile') }}>
-                  <User size={15} strokeWidth={1.75} />
-                  Profile
-                </button>
-
-                <hr className="dropdown-divider" />
-
                 <button className="dropdown-item dropdown-item--danger" onClick={handleSignOut}>
                   <LogOut size={15} strokeWidth={1.75} />
                   Sign out
                 </button>
-              </motion.div>
+              </MotionDiv>
             )}
           </AnimatePresence>
         </div>

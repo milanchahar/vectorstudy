@@ -1,9 +1,3 @@
-import { useUser } from '@clerk/clerk-react'
-import SubjectOnboarding from '../components/SubjectOnboarding'
-import ExamTimingPicker from '../components/ExamTimingPicker'
-import TextSyllabusInput from '../components/TextSyllabusInput'
-import MediaSyllabusUploader from '../components/MediaSyllabusUploader'
-
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, ArrowRight, Loader2, BookOpen } from 'lucide-react'
@@ -12,34 +6,56 @@ import DashboardStats from '../components/DashboardStats'
 import ProgressChart from '../components/ProgressChart'
 
 const API_BASE_URL = 'http://localhost:4000/api'
+const DEMO_USER = { id: 'demo-user', firstName: 'John' }
+const DEMO_USER_ID = DEMO_USER.id
 
 function DashboardPage() {
-  const { user, isLoaded } = useUser()
+  const user = DEMO_USER
+  const isLoaded = true
   const navigate = useNavigate()
   const [exam, setExam] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!isLoaded || !user) return
+    if (!isLoaded) return
 
     const fetchDashboardData = async () => {
       try {
         setLoading(true)
         const res = await axios.get(`${API_BASE_URL}/exams/active`, {
-          headers: { 'x-clerk-id': user.id }
+          headers: { 'x-clerk-id': DEMO_USER_ID }
         })
         setExam(res.data)
       } catch (err) {
-        if (err.response?.status !== 404) {
-          console.error('Failed to load dashboard:', err)
-        }
+        console.error('Failed to load dashboard:', err)
+        // DEMO MOCK DATA
+        setExam({
+          subject: 'Distributed Systems',
+          examDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+          topics: [
+            { id: '1', name: 'MapReduce Architecture', difficulty: 'HARD', weightage: 30, dayAssigned: 1, studyHours: 2.5, isCompleted: true },
+            { id: '2', name: 'Raft Consensus Protocol', difficulty: 'HARD', weightage: 25, dayAssigned: 2, studyHours: 3.0, isCompleted: true },
+            { id: '3', name: 'Vector Clocks', difficulty: 'MEDIUM', weightage: 20, dayAssigned: 3, studyHours: 1.5, isCompleted: false },
+            { id: '4', name: 'CAP Theorem', difficulty: 'EASY', weightage: 15, dayAssigned: 4, studyHours: 1.0, isCompleted: false },
+            { id: '5', name: 'Consistency Models', difficulty: 'MEDIUM', weightage: 10, dayAssigned: 5, studyHours: 2.0, isCompleted: false },
+          ],
+          stats: {
+            totalTopics: 5,
+            completedTopics: 2,
+            progressPercent: 40,
+            daysRemaining: 10,
+            hoursRemaining: 4.5,
+          }
+        })
       } finally {
         setLoading(false)
       }
     }
 
     fetchDashboardData()
-  }, [user, isLoaded])
+  }, [isLoaded])
+
+  const nextTopic = exam?.topics.find(topic => !topic.isCompleted) || null
 
   if (loading) {
     return (
@@ -96,11 +112,11 @@ function DashboardPage() {
                   <h3 className="section-title">Up Next</h3>
                 </div>
                 <div className="next-topic-info">
-                  {exam.topics.find(t => !t.isCompleted) ? (
+                  {nextTopic ? (
                     <>
-                      <h4 className="next-topic-name">{exam.topics.find(t => !t.isCompleted).name}</h4>
+                      <h4 className="next-topic-name">{nextTopic.name}</h4>
                       <p className="next-topic-meta">
-                        Day {exam.topics.find(t => !t.isCompleted).dayAssigned} • {exam.topics.find(t => !t.isCompleted).studyHours} hours
+                        Day {nextTopic.dayAssigned} • {nextTopic.studyHours} hours
                       </p>
                       <button className="btn btn-primary btn-sm mt-4" onClick={() => navigate('/roadmap')}>
                         Go to Timeline

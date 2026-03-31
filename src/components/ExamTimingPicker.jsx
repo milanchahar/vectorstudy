@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 const STORAGE_KEY = 'vectorstudy_exam_date'
 
@@ -38,8 +38,13 @@ function MondayIndex(day0Sunday) {
 }
 
 function ExamTimingPicker() {
-  const subjectsReady = true
-  const [selectedIso, setSelectedIso] = useState(null)
+  const [selectedIso, setSelectedIso] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY)
+    } catch {
+      return null
+    }
+  })
   const [monthCursor, setMonthCursor] = useState(() => new Date())
 
   const monthLabel = useMemo(() => {
@@ -48,19 +53,14 @@ function ExamTimingPicker() {
     return `${month} ${year}`
   }, [monthCursor])
 
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) setSelectedIso(stored)
-    } catch {}
-  }, [])
-
   function handlePick(date) {
     const iso = toISODate(date)
     setSelectedIso(iso)
     try {
       localStorage.setItem(STORAGE_KEY, iso)
-    } catch {}
+    } catch (err) {
+      console.warn('Unable to persist exam date:', err)
+    }
   }
 
   const grid = useMemo(() => {
@@ -157,4 +157,3 @@ function ExamTimingPicker() {
 }
 
 export default ExamTimingPicker
-

@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { useUser } from '@clerk/clerk-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import axios from 'axios'
 import { 
   Calendar, 
@@ -9,41 +8,53 @@ import {
   CheckCircle2, 
   Circle, 
   Clock, 
-  ChevronRight, 
   AlertCircle, 
   Loader2,
   Sparkles
 } from 'lucide-react'
 
 const API_BASE_URL = 'http://localhost:4000/api'
+const DEMO_USER_ID = 'demo-user'
 
 function RoadmapPage() {
-  const { user, isLoaded } = useUser()
+  const MotionDiv = motion.div
+  const isLoaded = true
   const [exam, setExam] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (!isLoaded || !user) return
+    if (!isLoaded) return
 
     const fetchActiveExam = async () => {
       try {
         setLoading(true)
+        setError(null)
         const res = await axios.get(`${API_BASE_URL}/exams/active`, {
-          headers: { 'x-clerk-id': user.id }
+          headers: { 'x-clerk-id': DEMO_USER_ID }
         })
         setExam(res.data)
       } catch (err) {
-        if (err.response?.status !== 404) {
-          setError('Failed to load your study plan. Please try again.')
-        }
+        console.error('Failed to load roadmap:', err)
+        setError('Showing sample roadmap because the server could not be reached.')
+        setExam({
+          subject: 'Distributed Systems',
+          examDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+          topics: [
+            { id: '1', name: 'MapReduce Architecture', difficulty: 'HARD', weightage: 30, dayAssigned: 1, studyHours: 2.5, isCompleted: true },
+            { id: '2', name: 'Raft Consensus Protocol', difficulty: 'HARD', weightage: 25, dayAssigned: 2, studyHours: 3.0, isCompleted: true },
+            { id: '3', name: 'Vector Clocks', difficulty: 'MEDIUM', weightage: 20, dayAssigned: 3, studyHours: 1.5, isCompleted: false },
+            { id: '4', name: 'CAP Theorem', difficulty: 'EASY', weightage: 15, dayAssigned: 4, studyHours: 1.0, isCompleted: false },
+            { id: '5', name: 'Consistency Models', difficulty: 'MEDIUM', weightage: 10, dayAssigned: 5, studyHours: 2.0, isCompleted: false },
+          ]
+        })
       } finally {
         setLoading(false)
       }
     }
 
     fetchActiveExam()
-  }, [user, isLoaded])
+  }, [isLoaded])
 
   const handleToggleComplete = async (topicId, currentStatus) => {
     try {
@@ -93,7 +104,7 @@ function RoadmapPage() {
   if (!exam) {
     return (
       <div className="roadmap-empty app-container">
-        <motion.div 
+        <MotionDiv 
           className="card-elevated empty-card"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -107,7 +118,7 @@ function RoadmapPage() {
             <Sparkles size={18} />
             Generate Study Plan
           </Link>
-        </motion.div>
+        </MotionDiv>
       </div>
     )
   }
@@ -142,7 +153,7 @@ function RoadmapPage() {
 
       <div className="timeline-container">
         {days.map((dayNum, idx) => (
-          <motion.div 
+          <MotionDiv 
             key={dayNum} 
             className="timeline-day"
             initial={{ opacity: 0, x: -20 }}
@@ -186,7 +197,7 @@ function RoadmapPage() {
                 ))}
               </div>
             </div>
-          </motion.div>
+          </MotionDiv>
         ))}
       </div>
 

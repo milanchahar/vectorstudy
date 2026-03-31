@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useUser } from '@clerk/clerk-react'
+import { AnimatePresence, motion } from 'framer-motion'
 import axios from 'axios'
 import { Sparkles, ArrowRight, ArrowLeft, Check, Loader2, Calendar, BookOpen, FileText } from 'lucide-react'
 
@@ -10,9 +9,15 @@ import ExamTimingPicker from '../components/ExamTimingPicker'
 import TextSyllabusInput from '../components/TextSyllabusInput'
 
 const API_BASE_URL = 'http://localhost:4000/api'
+const DEMO_USER = {
+  id: 'demo-user',
+  fullName: 'John Doe',
+  primaryEmailAddress: { emailAddress: 'john.doe@example.com' },
+}
 
 function SyllabusPage() {
-  const { user } = useUser()
+  const MotionDiv = motion.div
+  const user = DEMO_USER
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -70,7 +75,9 @@ function SyllabusPage() {
         subject,
         examDate,
         topics,
-        userId: user.id // Clerk ID
+        userId: user.id,
+        userName: user.fullName,
+        userEmail: user.primaryEmailAddress.emailAddress,
       }, {
         headers: { 'x-clerk-id': user.id }
       })
@@ -102,7 +109,7 @@ function SyllabusPage() {
 
       <div className="syllabus-content">
         <AnimatePresence mode="wait">
-          <motion.div
+          <MotionDiv
             key={step}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -162,7 +169,7 @@ function SyllabusPage() {
                 </div>
               </div>
             )}
-          </motion.div>
+          </MotionDiv>
         </AnimatePresence>
       </div>
 

@@ -1,12 +1,12 @@
-import { useSignIn, useAuth } from '@clerk/clerk-react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 function LoginPage() {
-  const { signIn, isLoaded } = useSignIn()
-  const { isSignedIn } = useAuth()
+  const MotionDiv = motion.div
+  const MotionButton = motion.button
   const navigate = useNavigate()
+  const isSignedIn = false
 
   useEffect(() => {
     if (isSignedIn) {
@@ -15,11 +15,7 @@ function LoginPage() {
   }, [isSignedIn, navigate])
 
   function handleGoogleSignIn() {
-    if (!isLoaded) return
-    signIn.authenticateWithRedirect({
-      strategy: 'oauth_google',
-      redirectUrl: '/dashboard',
-    })
+    navigate('/dashboard')
   }
 
   return (
@@ -28,7 +24,7 @@ function LoginPage() {
       <div className="login-blur-orb login-blur-orb--top" />
       <div className="login-blur-orb login-blur-orb--bottom" />
 
-      <motion.div
+      <MotionDiv
         className="login-card"
         initial={{ opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -62,7 +58,7 @@ function LoginPage() {
         <div className="login-card-body">
           <p className="login-prompt">Sign in to continue</p>
 
-          <motion.button
+          <MotionButton
             className="google-signin-btn"
             onClick={handleGoogleSignIn}
             whileHover={{ scale: 1.02 }}
@@ -88,7 +84,11 @@ function LoginPage() {
               />
             </svg>
             Continue with Google
-          </motion.button>
+          </MotionButton>
+
+          <p className="login-demo-note">
+            Demo mode is active, so the button above takes you straight into the app.
+          </p>
 
           <p className="login-terms">
             By continuing, you agree to our{' '}
@@ -97,7 +97,16 @@ function LoginPage() {
             <a href="#" className="login-link">Privacy Policy</a>.
           </p>
         </div>
-      </motion.div>
+      </MotionDiv>
+
+      <style>{`
+        .login-demo-note {
+          margin-top: 1rem;
+          font-size: 0.875rem;
+          color: var(--color-text-muted);
+          text-align: center;
+        }
+      `}</style>
     </div>
   )
 }
