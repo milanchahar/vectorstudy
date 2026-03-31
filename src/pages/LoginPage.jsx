@@ -18,8 +18,7 @@ function LoginPage() {
     if (!isLoaded) return
     signIn.authenticateWithRedirect({
       strategy: 'oauth_google',
-      redirectUrl: '/sso-callback',
-      redirectUrlComplete: '/dashboard',
+      redirectUrl: '/dashboard',
     })
   }
 

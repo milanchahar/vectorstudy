@@ -4,14 +4,47 @@ import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppLayout from './components/AppLayout'
+import SubjectOnboarding from './components/SubjectOnboarding'
 
 const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
-if (!clerkPublishableKey) {
-  throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY in .env.local')
-}
-
 function App() {
+  if (!clerkPublishableKey) {
+    return (
+      <div className="app-layout">
+        <header className="app-header">
+          <div className="nav-container">
+            <div className="nav-brand" role="banner" aria-label="VectorStudy">
+              <div className="nav-brand-icon">
+                <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+                  <rect width="32" height="32" rx="10" fill="var(--color-accent)" />
+                  <path d="M8 22L16 10L24 22" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M11 18H21" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
+              </div>
+              <span className="nav-brand-name">VectorStudy</span>
+            </div>
+          </div>
+        </header>
+
+        <main className="app-main">
+          <div className="app-container">
+            <div className="card-elevated" style={{ marginBottom: '1.5rem', padding: '1rem 1.25rem' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, marginBottom: '0.35rem' }}>
+                Preview mode
+              </div>
+              <div style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
+                Add `VITE_CLERK_PUBLISHABLE_KEY` in `.env.local` to enable Google auth. Section UI is visible below.
+              </div>
+            </div>
+
+            <SubjectOnboarding />
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <ClerkProvider publishableKey={clerkPublishableKey}>
       <BrowserRouter>
