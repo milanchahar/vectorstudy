@@ -772,6 +772,13 @@ img {
   max-width: 62ch;
 }
 
+.onboarding-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding-bottom: 2rem;
+}
+
 .subject-onboarding {
   display: flex;
   align-items: center;
@@ -883,6 +890,242 @@ img {
   font-size: 0.98rem;
 }
 
+.exam-timing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.exam-timing-card {
+  width: 100%;
+  max-width: 980px;
+}
+
+.onboarding-section-header {
+  padding: 2.25rem 2.25rem 1.25rem;
+}
+
+.onboarding-section-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+}
+
+.onboarding-section-subtitle {
+  margin-top: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  font-size: 1.02rem;
+  max-width: 70ch;
+}
+
+.exam-calendar {
+  padding: 0 2.25rem 2.25rem;
+}
+
+.exam-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.exam-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.exam-nav-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-muted);
+}
+
+.exam-month-label {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.exam-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 0.25rem 0 0.5rem;
+  gap: 0.5rem;
+}
+
+.exam-weekday {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.exam-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.exam-day {
+  height: 44px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--color-text-secondary);
+  font-weight: 700;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.exam-day:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-muted);
+  color: var(--color-text-primary);
+}
+
+.exam-day:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.exam-day--selected {
+  border-color: rgba(92, 106, 196, 0.65);
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  box-shadow: var(--shadow-accent);
+}
+
+.exam-selected-row {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.exam-selected-text {
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.exam-selected-strong {
+  color: var(--color-text-primary);
+}
+
+.syllabus-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.syllabus-text-card {
+  width: 100%;
+  max-width: 980px;
+}
+
+.syllabus-editor {
+  padding: 0 2.25rem 2.25rem;
+}
+
+.syllabus-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.syllabus-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 1.15rem 1.15rem;
+  min-height: 260px;
+  resize: vertical;
+  outline: none;
+  color: var(--color-text-primary);
+  line-height: 1.8;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  font-size: 1.02rem;
+}
+
+.syllabus-textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-light);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.syllabus-editor-footer {
+  margin-top: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.syllabus-charcount {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.voice-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-weight: 700;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.voice-toggle-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-muted);
+  color: var(--color-text-primary);
+}
+
+.voice-toggle-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.voice-toggle-btn--active {
+  border-color: rgba(92, 106, 196, 0.65);
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  box-shadow: var(--shadow-accent);
+}
+
+.syllabus-voice-hint {
+  margin-top: 0.9rem;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  line-height: 1.7;
+}
+
 @media (max-width: 900px) {
   .subject-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -894,7 +1137,7 @@ img {
     grid-template-columns: 1fr;
   }
 
-  .subject-grid, .subject-onboarding-header, .subject-onboarding-footer {
+  .subject-grid, .subject-onboarding-header, .subject-onboarding-footer, .onboarding-section-header, .exam-calendar, .syllabus-editor {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }

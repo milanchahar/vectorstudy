@@ -1,5 +1,7 @@
 import { useUser } from '@clerk/clerk-react'
 import SubjectOnboarding from '../components/SubjectOnboarding'
+import ExamTimingPicker from '../components/ExamTimingPicker'
+import TextSyllabusInput from '../components/TextSyllabusInput'
 
 function DashboardPage() {
   const { user } = useUser()
@@ -15,7 +17,11 @@ function DashboardPage() {
         </p>
       </section>
 
-      <SubjectOnboarding />
+      <div className="onboarding-stack">
+        <SubjectOnboarding />
+        <ExamTimingPicker />
+        <TextSyllabusInput />
+      </div>
     </div>
   )
 }

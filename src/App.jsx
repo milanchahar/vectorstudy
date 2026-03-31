@@ -5,6 +5,8 @@ import DashboardPage from './pages/DashboardPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppLayout from './components/AppLayout'
 import SubjectOnboarding from './components/SubjectOnboarding'
+import ExamTimingPicker from './components/ExamTimingPicker'
+import TextSyllabusInput from './components/TextSyllabusInput'
 
 const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -38,7 +40,11 @@ function App() {
               </div>
             </div>
 
-            <SubjectOnboarding />
+            <div className="onboarding-stack">
+              <SubjectOnboarding />
+              <ExamTimingPicker />
+              <TextSyllabusInput />
+            </div>
           </div>
         </main>
       </div>
