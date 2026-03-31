@@ -54,3 +54,29 @@ export async function createExamWithPlan({ userId, subject, examDate, topics }) 
     },
   })
 }
+
+export async function getActiveExam(userId) {
+  return await prisma.exam.findFirst({
+    where: {
+      userId,
+      status: 'ACTIVE',
+    },
+    include: {
+      topics: {
+        orderBy: {
+          dayAssigned: 'asc',
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+}
+
+export async function updateTopic(id, data) {
+  return await prisma.topic.update({
+    where: { id },
+    data,
+  })
+}

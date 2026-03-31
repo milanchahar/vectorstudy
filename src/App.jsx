@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppLayout from './components/AppLayout'
 import SyllabusPage from './pages/SyllabusPage'
+import RoadmapPage from './pages/RoadmapPage'
 import SubjectOnboarding from './components/SubjectOnboarding'
 import ExamTimingPicker from './components/ExamTimingPicker'
 import TextSyllabusInput from './components/TextSyllabusInput'
@@ -84,7 +85,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <AppLayout>
-                  <div className="page-placeholder">Roadmap — Section 14</div>
+                  <RoadmapPage />
                 </AppLayout>
               </ProtectedRoute>
             }
