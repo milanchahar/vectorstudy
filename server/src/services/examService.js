@@ -56,7 +56,7 @@ export async function createExamWithPlan({ userId, subject, examDate, topics }) 
 }
 
 export async function getActiveExam(userId) {
-  return await prisma.exam.findFirst({
+  const result = await prisma.exam.findFirst({
     where: {
       userId,
       status: 'ACTIVE',
@@ -72,6 +72,33 @@ export async function getActiveExam(userId) {
       createdAt: 'desc',
     },
   })
+
+  if (!result) return null
+
+  // Calculate stats
+  const totalTopics = result.topics.length
+  const completedTopics = result.topics.filter(t => t.isCompleted).length
+  const progressPercent = totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0
+
+  const now = new Date()
+  const examDate = new Date(result.examDate)
+  const diffTime = examDate.getTime() - now.getTime()
+  const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 3600 * 24)))
+
+  const hoursRemaining = result.topics
+    .filter(t => !t.isCompleted)
+    .reduce((acc, t) => acc + (t.studyHours || 0), 0)
+
+  return {
+    ...result,
+    stats: {
+      totalTopics,
+      completedTopics,
+      progressPercent,
+      daysRemaining,
+      hoursRemaining: Math.round(hoursRemaining * 10) / 10,
+    },
+  }
 }
 
 export async function updateTopic(id, data) {
