@@ -7,13 +7,7 @@ import { Sparkles, ArrowRight, ArrowLeft, Check, Loader2, Calendar, BookOpen, Fi
 import SubjectOnboarding from '../components/SubjectOnboarding'
 import ExamTimingPicker from '../components/ExamTimingPicker'
 import TextSyllabusInput from '../components/TextSyllabusInput'
-
-const API_BASE_URL = 'http://localhost:4000/api'
-const DEMO_USER = {
-  id: 'demo-user',
-  fullName: 'John Doe',
-  primaryEmailAddress: { emailAddress: 'john.doe@example.com' },
-}
+import { API_BASE_URL, DEMO_USER } from '../lib/examData'
 
 function SyllabusPage() {
   const MotionDiv = motion.div

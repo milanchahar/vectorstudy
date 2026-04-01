@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { API_BASE_URL } from './runtimeConfig'
 
-export const API_BASE_URL = 'http://localhost:4000/api'
+export { API_BASE_URL }
 
 export const DEMO_USER = {
   id: 'demo-user',

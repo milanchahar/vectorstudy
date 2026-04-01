@@ -1,16 +1,38 @@
-# React + Vite
+# VectorStudy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Adaptive AI exam planning with a Vite React frontend and an Express + Prisma backend.
 
-Currently, two official plugins are available:
+## Runtime
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Frontend:
+- `npm run dev`
+- `npm run build`
+- `npm run preview`
 
-## React Compiler
+Backend:
+- `cd server && npm run dev`
+- `cd server && npm run start`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Environment
 
-## Expanding the ESLint configuration
+Copy `.env.example` and fill in the values you need for your environment.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Frontend:
+- `VITE_API_BASE_URL` points the app at the backend API. In production it can be omitted if the frontend and API are served from the same origin under `/api`.
+- `VITE_CLERK_PUBLISHABLE_KEY` is reserved for the live Clerk integration.
+- `VITE_DEV_PORT` and `VITE_PREVIEW_PORT` control local Vite ports.
+- `VITE_BUILD_SOURCEMAP` enables production sourcemaps when set to `true`.
+
+Backend:
+- `PORT` controls the Express server port.
+- `CLIENT_URL` and `CLIENT_URLS` define allowed CORS origins.
+- `JSON_BODY_LIMIT` controls the maximum JSON request size.
+- `DATABASE_URL` points Prisma at PostgreSQL.
+- `GEMINI_API_KEY` enables Gemini topic extraction.
+- `YOUTUBE_API_KEY` enables YouTube tutorial lookup.
+
+## Deployment Notes
+
+- The frontend no longer hardcodes `localhost:4000`; use `VITE_API_BASE_URL` or same-origin `/api`.
+- The backend accepts multiple allowed client origins through `CLIENT_URLS`.
+- Vite production builds split heavier dependencies into separate chunks for better caching.
