@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AppLayout from './components/AppLayout'
 import SyllabusPage from './pages/SyllabusPage'
 import RoadmapPage from './pages/RoadmapPage'
+import AnalyticsPage from './pages/AnalyticsPage'
 function App() {
   return (
     <BrowserRouter>
@@ -45,7 +46,7 @@ function App() {
           element={
             <ProtectedRoute>
               <AppLayout>
-                <div className="page-placeholder">Analytics — Section 18</div>
+                <AnalyticsPage />
               </AppLayout>
             </ProtectedRoute>
           }

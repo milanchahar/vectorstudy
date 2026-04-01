@@ -12,9 +12,7 @@ import {
   Loader2,
   Sparkles
 } from 'lucide-react'
-
-const API_BASE_URL = 'http://localhost:4000/api'
-const DEMO_USER_ID = 'demo-user'
+import { API_BASE_URL, fetchActiveExam } from '../lib/examData'
 
 function RoadmapPage() {
   const MotionDiv = motion.div
@@ -26,34 +24,21 @@ function RoadmapPage() {
   useEffect(() => {
     if (!isLoaded) return
 
-    const fetchActiveExam = async () => {
+    const loadRoadmap = async () => {
       try {
         setLoading(true)
         setError(null)
-        const res = await axios.get(`${API_BASE_URL}/exams/active`, {
-          headers: { 'x-clerk-id': DEMO_USER_ID }
+        const { exam: activeExam, error: fallbackError } = await fetchActiveExam({
+          fallbackMessage: 'Showing sample roadmap because the server could not be reached.',
         })
-        setExam(res.data)
-      } catch (err) {
-        console.error('Failed to load roadmap:', err)
-        setError('Showing sample roadmap because the server could not be reached.')
-        setExam({
-          subject: 'Distributed Systems',
-          examDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
-          topics: [
-            { id: '1', name: 'MapReduce Architecture', difficulty: 'HARD', weightage: 30, dayAssigned: 1, studyHours: 2.5, isCompleted: true },
-            { id: '2', name: 'Raft Consensus Protocol', difficulty: 'HARD', weightage: 25, dayAssigned: 2, studyHours: 3.0, isCompleted: true },
-            { id: '3', name: 'Vector Clocks', difficulty: 'MEDIUM', weightage: 20, dayAssigned: 3, studyHours: 1.5, isCompleted: false },
-            { id: '4', name: 'CAP Theorem', difficulty: 'EASY', weightage: 15, dayAssigned: 4, studyHours: 1.0, isCompleted: false },
-            { id: '5', name: 'Consistency Models', difficulty: 'MEDIUM', weightage: 10, dayAssigned: 5, studyHours: 2.0, isCompleted: false },
-          ]
-        })
+        setExam(activeExam)
+        setError(fallbackError)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchActiveExam()
+    loadRoadmap()
   }, [isLoaded])
 
   const handleToggleComplete = async (topicId, currentStatus) => {
