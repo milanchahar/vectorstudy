@@ -525,6 +525,259 @@ img {
   padding-top: 4.5rem;
 }
 
+.app-page-shell {
+  min-height: calc(100vh - 4.5rem);
+}
+
+.loading-block {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(229, 226, 219, 0.85);
+}
+
+.loading-block::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.72), transparent);
+  animation: shimmer 1.6s infinite;
+}
+
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.875rem;
+}
+
+.skeleton-line {
+  height: 0.9rem;
+}
+
+.skeleton-line-title {
+  width: min(28rem, 72%);
+  height: 2.2rem;
+  border-radius: 1rem;
+}
+
+.skeleton-line-heading {
+  width: 10rem;
+  height: 1.15rem;
+}
+
+.skeleton-line-body {
+  width: min(30rem, 100%);
+  height: 0.95rem;
+}
+
+.skeleton-line-body.short {
+  width: 58%;
+}
+
+.skeleton-line-label {
+  width: 8.5rem;
+  height: 0.85rem;
+}
+
+.skeleton-line-label.narrow {
+  width: 4.75rem;
+}
+
+.skeleton-line-metric {
+  width: 7rem;
+  height: 2rem;
+  border-radius: 0.9rem;
+}
+
+.skeleton-line-caption {
+  width: 9.5rem;
+  height: 0.85rem;
+}
+
+.skeleton-line-caption.short {
+  width: 5rem;
+}
+
+.skeleton-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.9rem;
+  flex-shrink: 0;
+}
+
+.skeleton-avatar.small {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+}
+
+.skeleton-button {
+  width: 10.5rem;
+  height: 2.9rem;
+  border-radius: 1rem;
+}
+
+.skeleton-button.small {
+  width: 8rem;
+  height: 2.45rem;
+}
+
+.skeleton-pill {
+  width: 5rem;
+  height: 1.8rem;
+  border-radius: 999px;
+}
+
+.skeleton-pill.wide {
+  width: 8.5rem;
+}
+
+.skeleton-chart {
+  width: 100%;
+  height: 15rem;
+  border-radius: 1.5rem;
+}
+
+.skeleton-chart.tall {
+  height: 20rem;
+}
+
+.dashboard-page-skeleton,
+.roadmap-page-skeleton,
+.analytics-page-skeleton {
+  padding-top: 2.5rem;
+  padding-bottom: 6rem;
+}
+
+.dashboard-skeleton-header,
+.roadmap-skeleton-header,
+.analytics-skeleton-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-skeleton-copy,
+.roadmap-skeleton-copy,
+.analytics-skeleton-copy {
+  display: grid;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.dashboard-skeleton-stats,
+.analytics-skeleton-stats {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-skeleton-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.analytics-skeleton-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.stat-skeleton-card,
+.analytics-skeleton-card {
+  padding: 1.35rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-skeleton-main,
+.analytics-skeleton-main {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.dashboard-skeleton-main {
+  grid-template-columns: minmax(0, 1fr) 320px;
+}
+
+.analytics-skeleton-main {
+  grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.9fr);
+}
+
+.skeleton-chart-card,
+.analytics-skeleton-chart,
+.skeleton-side-card,
+.analytics-skeleton-panel {
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.analytics-skeleton-side {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.analytics-skeleton-meta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.timeline-skeleton {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.timeline-skeleton-day {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.timeline-skeleton-sidebar {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+}
+
+.timeline-skeleton-line {
+  width: 2px;
+  min-height: 12rem;
+  border-radius: 999px;
+  background: rgba(229, 226, 219, 0.9);
+}
+
+.timeline-skeleton-cards {
+  display: grid;
+  gap: 1rem;
+}
+
+.timeline-skeleton-card {
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-block::after {
+    animation: none;
+  }
+}
+
 .app-header {
   position: fixed;
   top: 0;

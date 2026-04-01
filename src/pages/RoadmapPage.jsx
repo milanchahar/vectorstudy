@@ -9,10 +9,10 @@ import {
   Circle, 
   Clock, 
   AlertCircle, 
-  Loader2,
   Sparkles
 } from 'lucide-react'
 import { API_BASE_URL, fetchActiveExam } from '../lib/examData'
+import { RoadmapSkeleton } from '../components/PageSkeletons'
 
 function RoadmapPage() {
   const MotionDiv = motion.div
@@ -78,12 +78,7 @@ function RoadmapPage() {
   }, [groupedTopics])
 
   if (loading) {
-    return (
-      <div className="roadmap-loading">
-        <Loader2 className="animate-spin text-accent" size={40} />
-        <p>Optimizing your study path...</p>
-      </div>
-    )
+    return <RoadmapSkeleton />
   }
 
   if (!exam) {

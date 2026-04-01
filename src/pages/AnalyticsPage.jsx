@@ -15,12 +15,12 @@ import {
   BookOpen,
   Calendar,
   CheckCircle2,
-  Loader2,
   Sparkles,
   Target,
   Zap,
 } from 'lucide-react'
 import { fetchActiveExam } from '../lib/examData'
+import { AnalyticsSkeleton } from '../components/PageSkeletons'
 
 const DIFFICULTY_COLORS = {
   EASY: 'var(--color-success)',
@@ -131,12 +131,7 @@ function AnalyticsPage() {
   }, [exam])
 
   if (loading) {
-    return (
-      <div className="analytics-loading">
-        <Loader2 className="animate-spin text-accent" size={34} />
-        <p>Mapping your mastery curve...</p>
-      </div>
-    )
+    return <AnalyticsSkeleton />
   }
 
   if (!exam || !analytics) {

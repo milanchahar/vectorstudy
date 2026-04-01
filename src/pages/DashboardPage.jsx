@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sparkles, ArrowRight, Loader2, BookOpen } from 'lucide-react'
+import { Sparkles, ArrowRight, BookOpen } from 'lucide-react'
 import DashboardStats from '../components/DashboardStats'
 import ProgressChart from '../components/ProgressChart'
+import { DashboardSkeleton } from '../components/PageSkeletons'
 import { DEMO_USER, fetchActiveExam } from '../lib/examData'
 
 function DashboardPage() {
@@ -33,12 +34,7 @@ function DashboardPage() {
   const nextTopic = exam?.topics.find(topic => !topic.isCompleted) || null
 
   if (loading) {
-    return (
-      <div className="dashboard-loading">
-        <Loader2 className="animate-spin text-accent" size={32} />
-        <p>Loading your study stats...</p>
-      </div>
-    )
+    return <DashboardSkeleton />
   }
 
   return (
