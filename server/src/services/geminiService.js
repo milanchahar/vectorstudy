@@ -81,9 +81,10 @@ export async function extractTopicsFromGemini({ subject, syllabusText }) {
     return extractTopicsWithoutGemini({ subject, syllabusText })
   }
 
-  const ai = new GoogleGenAI({ apiKey })
+  try {
+    const ai = new GoogleGenAI({ apiKey })
 
-  const prompt = `
+    const prompt = `
 You are an expert exam architect. Extract study topics from the syllabus for the given subject.
 
 Return ONLY valid JSON with this exact shape:
@@ -105,27 +106,31 @@ Syllabus:
 ${syllabusText}
 `.trim()
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-1.5-flash',
-    contents: prompt,
-  })
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: prompt,
+    })
 
-  const data = safeExtractJson(response?.text)
-  if (!data || !Array.isArray(data.topics)) {
+    const data = safeExtractJson(response?.text)
+    if (!data || !Array.isArray(data.topics)) {
+      return extractTopicsWithoutGemini({ subject, syllabusText })
+    }
+
+    const topics = data.topics
+      .map(topic => ({
+        name: typeof topic?.name === 'string' ? topic.name.trim() : '',
+        difficulty: normalizeTopicDifficulty(topic?.difficulty),
+        importance: normalizeImportance(topic?.importance),
+      }))
+      .filter(topic => topic.name.length > 0)
+
+    if (!topics.length) {
+      return extractTopicsWithoutGemini({ subject, syllabusText })
+    }
+
+    return { topics }
+  } catch (err) {
+    console.warn('Falling back to local topic extraction:', err?.message || err)
     return extractTopicsWithoutGemini({ subject, syllabusText })
   }
-
-  const topics = data.topics
-    .map(topic => ({
-      name: typeof topic?.name === 'string' ? topic.name.trim() : '',
-      difficulty: normalizeTopicDifficulty(topic?.difficulty),
-      importance: normalizeImportance(topic?.importance),
-    }))
-    .filter(topic => topic.name.length > 0)
-
-  if (!topics.length) {
-    return extractTopicsWithoutGemini({ subject, syllabusText })
-  }
-
-  return { topics }
 }

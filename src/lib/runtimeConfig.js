@@ -4,7 +4,7 @@ function trimTrailingSlash(value) {
 
 function getDefaultApiBaseUrl() {
   if (import.meta.env.DEV) {
-    return 'http://localhost:4000/api'
+    return '/api'
   }
 
   if (typeof window !== 'undefined' && window.location?.origin) {

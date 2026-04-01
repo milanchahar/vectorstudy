@@ -3,15 +3,13 @@ import { useState } from 'react'
 const STORAGE_KEY = 'vectorstudy_subject'
 
 const SUBJECTS = [
-  { id: 'dsa', label: 'DSA', description: 'Algorithms & problem solving' },
-  { id: 'dbms', label: 'DBMS', description: 'Schemas, queries, normalization' },
-  { id: 'os', label: 'OS', description: 'Processes, memory, scheduling' },
-  { id: 'cn', label: 'Computer Networks', description: 'Routing, protocols, TCP/IP' },
-  { id: 'coa', label: 'COA', description: 'Datapath, pipelining, performance' },
-  { id: 'oop', label: 'OOP', description: 'Abstraction, classes, design' },
+  { id: 'AP', label: 'AP', description: 'Applied Physics and core theory units' },
+  { id: 'MATHS4', label: 'MATHS4', description: 'Mathematics IV problem-heavy modules' },
+  { id: 'DVA', label: 'DVA', description: 'Data Visualization and analytics concepts' },
+  { id: 'SESD', label: 'SESD', description: 'Software engineering and system design topics' },
 ]
 
-function SubjectOnboarding() {
+function SubjectOnboarding({ onSelect }) {
   const [selectedId, setSelectedId] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -28,6 +26,7 @@ function SubjectOnboarding() {
     } catch (err) {
       console.warn('Unable to persist subject selection:', err)
     }
+    onSelect?.(id)
   }
 
   return (

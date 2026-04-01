@@ -22,11 +22,16 @@ function writeStoredText(value) {
   }
 }
 
-function TextSyllabusInput() {
+function TextSyllabusInput({ onChangeText }) {
   const [text, setText] = useState(readStoredText)
   const [isSupported] = useState(Boolean(SpeechRecognitionCtor))
   const [isListening, setIsListening] = useState(false)
   const recognitionRef = useRef(null)
+  const onChangeTextRef = useRef(onChangeText)
+
+  useEffect(() => {
+    onChangeTextRef.current = onChangeText
+  }, [onChangeText])
 
   useEffect(() => {
     if (!SpeechRecognitionCtor) return undefined
@@ -52,6 +57,7 @@ function TextSyllabusInput() {
       setText(prev => {
         const next = prev.trim().length === 0 ? normalized : `${prev.trim()} ${normalized}`
         writeStoredText(next)
+        onChangeTextRef.current?.(next)
         return next
       })
     }
@@ -70,6 +76,7 @@ function TextSyllabusInput() {
     const next = e.target.value
     setText(next)
     writeStoredText(next)
+    onChangeTextRef.current?.(next)
   }
 
   function toggleListening() {

@@ -24,10 +24,40 @@ function isImage(file) {
   return file && file.type && file.type.startsWith('image/')
 }
 
-function MediaSyllabusUploader() {
+function readStoredMediaNames() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    const parsed = raw ? JSON.parse(raw) : []
+    return Array.isArray(parsed) ? parsed.filter(name => typeof name === 'string' && name.trim()) : []
+  } catch {
+    return []
+  }
+}
+
+function persistMediaNames(items) {
+  const names = items.map(item => item.file.name)
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(names))
+  } catch (err) {
+    console.warn('Unable to persist syllabus media names:', err)
+  }
+  return names
+}
+
+function MediaSyllabusUploader({ onFilesChange }) {
   const inputRef = useRef(null)
   const [isDragActive, setIsDragActive] = useState(false)
-  const [files, setFiles] = useState([])
+  const [files, setFiles] = useState(() =>
+    readStoredMediaNames().map(name => ({
+      file: { name, size: 0, type: '' },
+      previewUrl: null,
+      restored: true,
+    }))
+  )
+
+  useEffect(() => {
+    onFilesChange?.(files.map(item => item.file.name))
+  }, [files, onFilesChange])
 
   useEffect(() => {
     return () => {
@@ -57,12 +87,7 @@ function MediaSyllabusUploader() {
 
     setFiles(prev => {
       const merged = [...prev, ...withPreviews]
-      const names = merged.map(x => x.file.name)
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(names))
-      } catch (err) {
-        console.warn('Unable to persist syllabus media names:', err)
-      }
+      persistMediaNames(merged)
       return merged
     })
   }
@@ -108,12 +133,7 @@ function MediaSyllabusUploader() {
       const target = prev[index]
       if (target?.previewUrl) URL.revokeObjectURL(target.previewUrl)
       const next = prev.filter((_, i) => i !== index)
-      const names = next.map(x => x.file.name)
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(names))
-      } catch (err) {
-        console.warn('Unable to persist syllabus media names:', err)
-      }
+      persistMediaNames(next)
       return next
     })
   }
@@ -121,11 +141,7 @@ function MediaSyllabusUploader() {
   function removeAll() {
     setFiles(prev => {
       for (const item of prev) if (item.previewUrl) URL.revokeObjectURL(item.previewUrl)
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify([]))
-      } catch (err) {
-        console.warn('Unable to clear syllabus media names:', err)
-      }
+      persistMediaNames([])
       return []
     })
   }

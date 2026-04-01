@@ -37,7 +37,7 @@ function MondayIndex(day0Sunday) {
   return (day0Sunday + 6) % 7
 }
 
-function ExamTimingPicker() {
+function ExamTimingPicker({ onPick }) {
   const [selectedIso, setSelectedIso] = useState(() => {
     try {
       return localStorage.getItem(STORAGE_KEY)
@@ -61,6 +61,7 @@ function ExamTimingPicker() {
     } catch (err) {
       console.warn('Unable to persist exam date:', err)
     }
+    onPick?.(iso)
   }
 
   const grid = useMemo(() => {

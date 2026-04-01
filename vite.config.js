@@ -6,6 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const devPort = Number(env.VITE_DEV_PORT) || 5173
   const previewPort = Number(env.VITE_PREVIEW_PORT) || 4173
+  const proxyTarget = env.VITE_PROXY_TARGET || 'http://localhost:4000'
 
   return {
     plugins: [
@@ -15,6 +16,12 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0',
       port: devPort,
+      proxy: {
+        '/api': {
+          target: proxyTarget,
+          changeOrigin: true,
+        },
+      },
     },
     preview: {
       host: '0.0.0.0',
