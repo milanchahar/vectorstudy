@@ -36,3 +36,37 @@ Backend:
 - The frontend no longer hardcodes `localhost:4000`; use `VITE_API_BASE_URL` or same-origin `/api`.
 - The backend accepts multiple allowed client origins through `CLIENT_URLS`.
 - Vite production builds split heavier dependencies into separate chunks for better caching.
+
+## 📁 Project Structure
+
+\`\`\`
+vector-study/
+├── client/                 # React frontend (Vite)
+│   ├── src/
+│   │   ├── components/     # UI components (Atomic design)
+│   │   ├── hooks/          # Custom React hooks
+│   │   └── pages/          # View logic
+├── server/                 # Node.js backend
+│   ├── controllers/        # Gemini & YT API logic
+│   ├── prisma/             # DB Schema & migrations
+│   └── routes/             # Express API endpoints
+└── .env                    # Environment variables
+\`\`\`
+
+
+## 📁 Project Structure
+
+\`\`\`
+vector-study/
+├── client/                 # React frontend (Vite)
+│   ├── src/
+│   │   ├── components/     # UI components (Atomic design)
+│   │   ├── hooks/          # Custom React hooks
+│   │   └── pages/          # View logic
+├── server/                 # Node.js backend
+│   ├── controllers/        # Gemini & YT API logic
+│   ├── prisma/             # DB Schema & migrations
+│   └── routes/             # Express API endpoints
+└── .env                    # Environment variables
+\`\`\`
+
