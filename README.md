@@ -70,3 +70,16 @@ vector-study/
 └── .env                    # Environment variables
 \`\`\`
 
+
+## 🚀 Core Features
+
+- Intelligent Syllabus Analysis: Instantly categorizes topics into Easy, Medium, and Hard based on conceptual complexity and historical weightage.
+
+- Vector Roadmap Engine: Generates a daily study schedule that prioritizes high-impact topics to maximize grade potential.
+
+- Dynamic Adaptation: A "Flex" system that automatically redistributes missed tasks without overwhelming the user or missing the exam deadline.
+
+- Curated Learning: Integrated YouTube Data API to provide the highest-rated tutorials for every topic in the syllabus.
+
+- Modern Security: Secure, one-tap access via Google OAuth (Clerk).
+
